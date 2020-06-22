@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <base href="/">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="/favicon.ico">
+        <title>r-chat room</title>
+    
+        <meta name="title" content="" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="revisit-after" content="" />
+    
+        <!-- HeaderSetter > JS Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/internal/socket.io.js"></script>
+        <script src="/internal/chat.js"></script>
+        <!-- HeaderSetter > CSS Libraries -->
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    </head>
+    <body onbeforeunload="return chat.unload()">
+        <wrap>
+            <div class="popup">
+                <br>
+                <div class="ptitle">
+                    {title}
+                </div>
+                <br>
+                <div class="pcontent">
+                    lorem ipsum whetever
+                </div>
+                <div class="pinput">
+                    <form id="pkeyform">
+                        <input id="passkeyin" autocomplete="off" type="text" placeholder="passkey" name="message" autofocus>
+                        <button id="turninkey" type="submit">CONTINUE</button>
+                    </form>
+                </div>
+                <div class="pdone">
+                    <button onclick="chat.closeModal()" id="turninkey" type="submit">CONTINUE</button>
+                </div>
+            </div>
+            <div class="blurer">
+                
+                <div id="chat">
+                    <div class="sidebar">
+                        <div class="channelWrapper">
+                            <div class="channel">
+                                <strong>Available Channels</strong>
+                            </div>
+                            <div class="channel chan1 actChan">
+                                <b><a id="aa1" onclick="chat.expandChan(1)">> </a></b> #general <span id="hrNum1">(0)</span><a onclick="chat.switchChan(1)" class="hidejoin" id="join1">&nbsp;+&nbsp;</a><br>
+                            </div>
+                            <div class="channel chan2 Chan">
+                                <b><a id="aa2" onclick="chat.expandChan(2)">> </a></b> #random <span id="hrNum2">(0)</span><a onclick="chat.switchChan(2)" class="join" id="join2">&nbsp;+&nbsp;</a><br>
+                            </div>
+                            <div class="channel chan3 Chan">
+                                <b><a id="aa3" onclick="chat.expandChan(3)">> </a></b> #school <span id="hrNum3">(0)</span><a onclick="chat.switchChan(3)" class="join" id="join3">&nbsp;+&nbsp;</a><br>
+                            </div>
+                            <div class="channel pchan chan4 Chan">
+                                <b><a id="aa4" onclick="chat.expandChan(4)">> </a></b> #private <span id="hrNum4">(0)</span><a onclick="chat.short4()" class="pjoin join" id="join4">&nbsp;+&nbsp;</a><br>
+                            </div>
+                        </div>
+                        <div class="userWrapper">
+                            <br>
+                            <b>Username: </b><span id="hrUsern">this.username</span><br>
+                            <b>Perm Level: </b><span id="hrUserl">this.level</span><br><br>
+                        </div>
+                    </div>
+                    <div class="viewport" id="chatBox">
+                        <div id="chM"><span class="server" id="chatMessage">> <span class="prefix" id="server">[BROADCAST] </span>Welcome to the chat!</span></div>
+                    </div>
+                    <div class="message">
+                        <div class="ist">is typing...</div>
+                        <form action="#" onsubmit="return chat.emitChatMessage(this);">
+                            <input id="mes" autocomplete="off" type="text" placeholder="type message here..." name="message" autofocus>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </wrap>
+    </body>
+    <style>
+        .pinput {visibility: hidden;} .popup{visibility: hidden; color: white;} .pdone{visibility: hidden;}
+        #passkeyin {width: 50%;height: 20px;margin-left: 25%;margin-top: 50px;} #turninkey{width: 50%;height: 20px;margin-left: 25%;margin-top: 10px;}
+        .ptitle{font-size: 2rem;font-weight: 600; text-align: center;text-transform: uppercase;}.pcontent{padding: 5px;padding-left: 12px;padding-right: 12px;text-align: center;}
+        .blurer {opacity: 1;}.popup{position: absolute; width: 40%; height: 40%; background-color: rgb(67, 60, 70);border: red 3px solid; z-index: 999;top: 25%;left: 30%}
+        .join {background-color: #465f48;padding: 1px;border-radius: 5px;float: right;} .hidejoin {visibility: hidden;}
+        .userWrapper{ padding: 10px;color:rgb(228, 228, 228);bottom: 0;position: absolute;} .pchan{background-color: #503d3d!important;} .pjoin{background-color: #7a7777!important;}
+        .channel {color: rgb(228, 228, 228);border-radius: 5px;padding: 7px; width: 87%;margin-bottom: 10px;} .Chan {background-color: #3d3f44;}
+        .mod {background-color: rgb(67, 60, 70);border-radius: 5px;border-left: #ba1afa solid 5px;} .channelWrapper{ padding: 10px;}.actChan {background-color: #3e503f;}
+        #admin {color: #faa61a!important;} #chatMessage {padding: 7px;}#mod {color: #ba1afa!important;}
+        #chM {margin-bottom: 13px;} .user {padding-left: 12px!important;}.admin {background-color: rgb(64, 63, 62);border-radius: 5px;border-left: #faa61a solid 5px;}
+        .prefix{} #server {color: #7289da!important;} .server {background-color: rgb(47, 49, 54);border-radius: 5px;border-left: #7289da solid 5px;}
+        .viewport {background-color: #37393e;position:absolute;width: 77%;right:-40px;top: -10px;height: 90%;font-family: 'Courier New', Courier, monospace!important;
+        overflow: scroll;padding: 20px;color: rgb(228, 228, 228);} .ist{margin-left: 25px; color: gray;font-size: 0.9rem;}
+        #sub {position: absolute; width: 15%; right: 25px;height: 30px; top: 25%; bottom: 35%;}
+        #mes {position: absolute; width: 85%;height: 30px; top: 25%; bottom: 35%;left: 25px;background-color: rgb(65, 68, 75);border: 0;
+            border-radius: 5px;overflow-x: hidden;overflow-y: scroll;padding: 5px;color: rgb(228, 228, 228);}
+        .sidebar{ height: 100%;width: 23%; }
+        .message {background-color: #37393e;position:absolute;width: 77%;right:0;bottom: 0;height: 10%;}
+        a {text-decoration: none; color: lightgray} a:hover{color:lightpink;}
+        .good {color: rgb(7, 221, 7)!important; text-transform: uppercase;}
+        .bad {color: red!important; text-transform: uppercase;}
+        .inact {color: orange!important; text-transform: uppercase;}
+        #urlinput {width: 25%;} .rit {float: right;}
+        form, table {
+     display:inline;
+     margin:0px;
+     padding:0px;
+}
+        #opt {
+            float: left;
+            left: 0;
+            top: 0;
+            height: 40px;
+            width: 60%;
+        }
+        #param {
+            position: absolute;
+            float: right;
+            right: 0;
+            top: 0;
+            height: 40px;
+            width: 37%;
+        }
+        #menu {
+            position: absolute;
+            width: 95%;
+            top: 0;
+            margin-right: 20px;
+            margin-left: 10px;
+            height: 40px;
+            color: white;
+            overflow: hidden;
+        }
+        #mti {font-size: 1.6em; font-weight: 700;padding-right: 20px;}
+        #failed {color: red; visibility: hidden;}
+        #lTitle {font-size: 2rem; text-decoration: underline;}
+        #chat {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 10px;
+            bottom: 10px!important;
+            background-color: #2f3136;
+        }
+        wrap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 6 0px;
+            display: table-cell;
+  vertical-align: middle;
+        }
+        body {
+            display: table;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                background-color: #2f3136;
+                font-family: Wit 'IBM Plex Sans', sans-serif;
+        }
+    </style>
+    <script>
+        var local= {clear:()=>{var myFrame = $("#browser").contents().find('body');myFrame.html("cleared");},unload:()=>{return document.cookie="_activeSession=null"}}
+        chat.initVariable(getCookie('_chatroomID').replace('%23', '#'));
+        chat.openEmitListener(chat.room);
+        
+   </script>
+</html>

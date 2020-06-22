@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <base href="/">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="/favicon.ico">
+        <title>r-proxy login</title>
+    
+        <meta name="title" content="" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="revisit-after" content="" />
+    
+        <!-- HeaderSetter > JS Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- HeaderSetter > CSS Libraries -->
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    </head>
+    <body>
+        <wrap>
+            <div id="login">
+                <strong id="lTitle">Proxy Authentication</strong><br><br>
+                <p id="desc">enter your token below</p>
+                <form autocomplete="off" action="/internal/callback/auth" method="POST">
+                    <input autocomplete="new-password" type="password" placeholder="type here..." name="token">
+                    <button type="submit">continue</button>
+                </form><br>
+                <span id="failed">error: invalid token</span>
+            </div><br><br>
+            <div id="login">
+                <strong id="lTitle">Chat Authentication</strong><br>
+                <p id="desc">enter the credentials below</p>
+                <form autocomplete="off" action="/chat/callback/auth" method="POST">
+                    <input autocomplete="off" type="text" placeholder="desired username..." name="username"><br><br>
+                    <input autocomplete="off" type="text" placeholder="chatroom ID (#main)" value="#general" name="chid"><br><br>
+                    <button type="submit">continue</button>
+                </form>
+                <span id="failed2">error: invalid chatroom id</span>
+            </div>
+        </wrap>
+    </body>
+    <style>
+        #failed {color: red; visibility: hidden;}
+        #failed2 {color: red; visibility: hidden;}
+        #lTitle {font-size: 2rem; text-decoration: underline;}
+        #login {
+            border: 3px solid red;
+            padding: 10px;
+            text-align: center;
+            height: 15rem;
+            margin-left: auto;
+            margin-right: auto;
+            width: 25rem;
+            background-color: lightgray;
+        }
+        wrap {
+            display: table-cell;
+  vertical-align: middle;
+        }
+        body {
+            display: table;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                background-color: gray;
+                font-family: 'IBM Plex Sans', sans-serif;
+        }
+    </style>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.get('throw') === 'login1') {
+            $('#failed').css('visibility', 'visible');
+            
+        }
+        if(urlParams.get('throw') === 'login2') {
+            $('#failed2').css('visibility', 'visible');
+            
+        }
+    </script>
+</html>

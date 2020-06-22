@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <base href="/">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="/favicon.ico">
+        <title>chatroom admin</title>
+    
+        <meta name="title" content="" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="revisit-after" content="" />
+    
+        <!-- HeaderSetter > JS Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <!-- HeaderSetter > CSS Libraries -->
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    </head>
+    <body>
+        <wrap>
+            <div id="login">
+                <strong id="lTitle">Admin Control Panel</strong><br><br>
+                <br>
+                KICK USERNAME:
+                <form action="/internal/callback/admin/admittoken" method="POST"><input type="text" placeholder="kick username" name="token">&nbsp;&nbsp;<button type="submit">submit</button></form>
+                <br>
+                ALLOW USERNAME:
+                <form action="/internal/callback/admin/revoketoken" method="POST"><input type="text" placeholder="allow username" name="token">&nbsp;&nbsp;<button type="submit">submit</button></form>
+                <br>
+                BROADCAST MESSAGE:
+                <form action="/internal/callback/admin/broadcastmessage" method="POST"><input type="text" placeholder="message..." name="token">&nbsp;&nbsp;<button type="submit">submit</button></form>
+                <br>
+                LIVE USERS:<br>
+                <span id="hotreplace1">[]</span><br>
+                <br>
+                <form action="/internal/callback/admin/blockAllUsersNOWWWW" method="POST"><button type="submit">KICK ALL USERS</button></form>
+                <br>
+                <form action="/internal/callback/admin/restartServerNOWWWW" method="POST"><button type="submit">SHUTDOWN SERVER PROCESS</button></form>
+            
+            </div>
+        </wrap>
+    </body>
+    <style>
+        #hotreplace1 {font-size: 0.8rem;}
+        #failed {color: red; visibility: hidden;}
+        #lTitle {font-size: 2rem; text-decoration: underline; text-align: center!important;}
+        #login {
+            border: 3px solid red;
+            padding: 10px;
+            text-align: left;
+            height: 25rem;
+            margin-left: auto;
+            margin-right: auto;
+            width: 35rem;
+            background-color: lightgray;
+        }
+        wrap {
+            display: table-cell;
+  vertical-align: middle;
+        }
+        body {
+            display: table;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                background-color: gray;
+                font-family: 'IBM Plex Sans', sans-serif;
+        }
+    </style>
+    <script>
+        var req = new XMLHttpRequest();
+        req.open('GET', document.location, false);
+        req.send(null);
+        var a = JSON.parse(req.getResponseHeader('tokens'))
+        var b = "";
+        a.forEach(element => {
+            b = b + element + ", "
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        $('#hotreplace1').text(b)
+    </script>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <base href="/">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="icon" href="/favicon.ico">
+        <title>r-proxy</title>
+    
+        <meta name="title" content="" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <meta name="revisit-after" content="" />
+    
+        <!-- HeaderSetter > JS Libraries -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/internal/socket.io.js"></script>
+        <script src="/internal/session_manager.js"></script>
+        <!-- HeaderSetter > CSS Libraries -->
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    </head>
+    <body onbeforeunload="return local.unload()">
+        <wrap>
+            <div id="menu">
+                <div id="opt">
+                    <span id="mti">rproxy service</span>
+                        <button onclick="local.clear()">CLEAR</button>
+                            <input autocomplete="off" disabled id="urlinput" type="text" placeholder="enter url..." >
+                </div>
+                <div id="param">
+                    Connection State: <span class="conState inact" id="good">Inactive</span> <a href="/" class="rit lOut">[logout]</a> 
+                    <a href="/" class="rit goHome">[home page]&nbsp;&nbsp;</a><br>
+                    Authentication State: <span class="authState good" id="good">Good</span>
+                </div>
+            </div>
+            <iframe class="viewport" id="browser">
+                
+            </iframe>
+        </wrap>
+    </body>
+    <style>
+        a {text-decoration: none; color: lightgray} a:hover{color:lightpink;}
+        .good {color: rgb(7, 221, 7)!important; text-transform: uppercase;}
+        .bad {color: red!important; text-transform: uppercase;}
+        .inact {color: orange!important; text-transform: uppercase;}
+        #urlinput {width: 50%;} .rit {float: right;}
+        form, table {
+     display:inline;
+     margin:0px;
+     padding:0px;
+}
+        #opt {
+            float: left;
+            left: 0;
+            top: 0;
+            height: 40px;
+            width: 60%;
+        }
+        #param {
+            position: absolute;
+            float: right;
+            right: 0;
+            top: 0;
+            height: 40px;
+            width: 37%;
+        }
+        #menu {
+            position: absolute;
+            width: 95%;
+            top: 0;
+            margin-right: 20px;
+            margin-left: 10px;
+            height: 40px;
+            color: white;
+            overflow: hidden;
+        }
+        #mti {font-size: 1.6em; font-weight: 700;padding-right: 20px;}
+        #failed {color: red; visibility: hidden;}
+        #lTitle {font-size: 2rem; text-decoration: underline;}
+        #browser {
+            position: absolute;
+            border: 5px solid red;
+            padding: 10px;
+            height: 87%;
+            margin-right: 20px;
+            margin-left: 40px;
+            bottom: 25px!important;
+            width: 90%;
+            background-color: white;
+        }
+        wrap {
+            display: table-cell;
+  vertical-align: middle;
+        }
+        body {
+            display: table;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+                background-color: gray;
+                font-family: 'IBM Plex Sans', sans-serif;
+        }
+    </style>
+    <script>
+        var local= {clear:()=>{var myFrame = $("#browser").contents().find('body');myFrame.html("cleared");},bye:()=>{$('#go').remove();},unload:()=>{return (document.cookie="_activeSession=null") && (document.cookie="_target="+window.location.host);}}
+    </script>
+</html>
