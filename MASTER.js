@@ -77,7 +77,7 @@ sio.on('connection', (socket) => {
     });
 
     socket.on('user#general', (msg) => {
-        // console.log("[proxy] new chat on #general");
+        console.log(msg)
         sio.emit('user#general', msg);
     });
     socket.on('user#random', (msg) => {

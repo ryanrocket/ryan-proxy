@@ -63,6 +63,8 @@ var chat = {
                             str=str+cmd[i]+" ";
                         }
                     socket.emit('meta#bcast', {message: str});
+                } else {
+                    socket.emit('user'+this.room, {user: this.username, level: this.level, message: loc, room: this.room});
                 }
             } else {
                 socket.emit('user'+this.room, {user: this.username, level: this.level, message: loc, room: this.room});
@@ -78,6 +80,8 @@ var chat = {
         socket.on('user'+room, function(msg){
             // <span class="server" id="chatMessage">> <span class="prefix" id="server">[BROADCAST] </span>Hello World!</span>
             if(msg.level === 'admin' || msg.level === 'mod') {
+                console.log('command received')
+
                 if(msg.message.substring(0,2) === '//') {
                     var cmd = msg.message.split(" ");
                     if(cmd[0] === '//clear') {
@@ -190,6 +194,7 @@ var chat = {
                     chat.switchChan(chan);
                     chat.closeModal('private');
                 } else {
+                    chat.closeModal('private');
                 }
             })
         } else {
