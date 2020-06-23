@@ -18,7 +18,8 @@
         <script src="/internal/socket.io.js"></script>
         <script src="/internal/chat.js"></script>
         <!-- HeaderSetter > CSS Libraries -->
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    </head>
+        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">    
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;1,300&family=Roboto+Mono:ital,wght@0,200;0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">    </head>
     <body onbeforeunload="return chat.unload()">
         <wrap>
             <div class="popup">
@@ -41,7 +42,11 @@
                 </div>
             </div>
             <div class="blurer">
-                
+                <div id="banner">
+                    <div id="bAlert">
+                        <span id="bAcontent">By using, you agree to these terms and conditions <a id="tos" onclick="chat.terms()">&nbsp;read&nbsp;</a></span>
+                    </div>
+                </div>
                 <div id="chat">
                     <div class="sidebar">
                         <div class="channelWrapper">
@@ -81,8 +86,12 @@
         </wrap>
     </body>
     <style>
+        #banhammer {color:red;} .banhammer {background-color: rgb(47, 49, 54);border-radius: 5px;border-left: #ff0000 solid 5px;}
+        #bAcontent{font-size: 0.8rem; }#tos {color: white;padding: 1px; border-radius: 6px; border: white 1px solid;} #tos:hover{color: #7289da; background-color: white;}
+        #bAlert{width: 77.3%; height: 90%; background-color: #7289da;float: right; right: -3px;position: absolute;top:0;text-align: center;padding-top: 3px;} 
+        #banner {position: absolute; width: 98%; height: 3%; z-index: 3;top: 0; left: 0;border-bottom: #1d1d1d 1px solid;color: white;padding-right: 1%;padding-left: 1%;}
         .pinput {visibility: hidden;} .popup{visibility: hidden; color: white;} .pdone{visibility: hidden;}
-        #passkeyin {width: 50%;height: 20px;margin-left: 25%;margin-top: 50px;} #turninkey{width: 50%;height: 20px;margin-left: 25%;margin-top: 10px;}
+        #passkeyin {width: 50%;height: 20px;margin-left: 25%;margin-top: 50px;} #turninkey{width: 50%;height: 20px;margin-left: 25%;margin-top: 10px;border: red 2px solid;}
         .ptitle{font-size: 2rem;font-weight: 600; text-align: center;text-transform: uppercase;}.pcontent{padding: 5px;padding-left: 12px;padding-right: 12px;text-align: center;}
         .blurer {opacity: 1;}.popup{position: absolute; width: 40%; height: 40%; background-color: rgb(67, 60, 70);border: red 3px solid; z-index: 999;top: 25%;left: 30%}
         .join {background-color: #465f48;padding: 1px;border-radius: 5px;float: right;} .hidejoin {visibility: hidden;}
@@ -92,12 +101,12 @@
         #admin {color: #faa61a!important;} #chatMessage {padding: 7px;}#mod {color: #ba1afa!important;}
         #chM {margin-bottom: 13px;} .user {padding-left: 12px!important;}.admin {background-color: rgb(64, 63, 62);border-radius: 5px;border-left: #faa61a solid 5px;}
         .prefix{} #server {color: #7289da!important;} .server {background-color: rgb(47, 49, 54);border-radius: 5px;border-left: #7289da solid 5px;}
-        .viewport {background-color: #37393e;position:absolute;width: 77%;right:-40px;top: -10px;height: 90%;font-family: 'Courier New', Courier, monospace!important;
-        overflow: scroll;padding: 20px;color: rgb(228, 228, 228);} .ist{margin-left: 25px; color: gray;font-size: 0.9rem;}
+        .viewport {background-color: #37393e;position:absolute;width: 77%;right:-40px;top: -10px;height: 85%;font-family: 'Courier New', Courier, monospace!important;
+        overflow: scroll;padding: 20px;padding-top: 30px;padding-bottom: 40px;color: rgb(228, 228, 228);top: 3%;} .ist{margin-left: 25px; color: gray;font-size: 0.9rem;}
         #sub {position: absolute; width: 15%; right: 25px;height: 30px; top: 25%; bottom: 35%;}
         #mes {position: absolute; width: 85%;height: 30px; top: 25%; bottom: 35%;left: 25px;background-color: rgb(65, 68, 75);border: 0;
             border-radius: 5px;overflow-x: hidden;overflow-y: scroll;padding: 5px;color: rgb(228, 228, 228);}
-        .sidebar{ height: 100%;width: 23%; }
+        .sidebar{ height: 97%;width: 23%;position:absolute;bottom: 0;}
         .message {background-color: #37393e;position:absolute;width: 77%;right:0;bottom: 0;height: 10%;}
         a {text-decoration: none; color: lightgray} a:hover{color:lightpink;}
         .good {color: rgb(7, 221, 7)!important; text-transform: uppercase;}
@@ -144,6 +153,7 @@
             right: 10px;
             bottom: 10px!important;
             background-color: #2f3136;
+            height: 100%;
         }
         wrap {
             position: absolute;
@@ -163,7 +173,9 @@
                 width: 100%;
                 overflow: hidden;
                 background-color: #2f3136;
-                font-family: Wit 'IBM Plex Sans', sans-serif;
+                font-family: 'Roboto Mono', monospace;
+            padding: 0;
+            margin: 0;
         }
     </style>
     <script>

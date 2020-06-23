@@ -7,7 +7,9 @@ socket = io(window.location.protocol+"//"+window.location.hostname + ':7000');
     console.log('[proxy] IO stream pipe fixated');
     console.log('[proxy] assessing target ' + window.location.protocol+"//"+window.location.hostname );
     $('input[type="text"]').focus()
-    
+    $(window).bind('beforeunload', function(){
+        return '>>>>>Before You Go<<<<<<<< \n Your custom message go here';
+    });
 }());
 var chat = {
     username: null,
@@ -25,7 +27,7 @@ var chat = {
             this.uuid = getCookie('_tempID')
             this.uuid = this.uuid.substr(this.uuid.length - 4);
         }
-        this.username = getCookie('_username')+'#'+this.uuid;
+        this.username = getCookie('_username').replace('%20', '_')+'#'+this.uuid;
         console.log('[proxy] identified room -> '+this.room)
         console.log('[proxy] initialized environment');
         socket.emit('meta#all', {intend: 'join', chan: chat.room, user: chat.username});
@@ -121,21 +123,27 @@ var chat = {
         });
     },
     printChat: function(msg) {
-        let final = "<div id='chM'><span class='"+msg.level+"' id='chatMessage'>> <span class='prefix' id='"+msg.level+"'> ["+msg.user+"] </span>"+msg.message+"</span></div>";
+        let final = "<div id='chM'><span class='"+msg.level+"' id='chatMessage'>> <span class='prefix' id='"+msg.level+"'> ["+msg.user+"] </span>"+chat.censorRE(msg.message)+"</span></div>";
         var ff = $('.viewport').html() + final;
         $('.viewport').html(ff);
         $('.viewport').scrollTop($('.viewport').height());
     },
     unload: function() {
         socket.emit('user'+this.room, {user: 'BROADCAST', level: 'server', message: this.username+" left the channel.", room: this.room});
-        chat.discon(chat.room);
+        socket.emit('meta#all', {intend: 'leave', chan: chat.room, user: chat.username});
+        console.log("[proxy] IO pipe disconnect");
+        return false;
     },
     gotKicked: function() {
-        window.alert("You have been kicked from this server!");
-        socket.emit('user'+this.room, {user: 'BROADCAST', level: 'server', message: this.username+" was kicked from the channel.", room: this.room});
+        socket.emit('meta#all', {intend: 'leave', chan: chat.room, user: chat.username});
+        socket.emit('user'+this.room, {user: 'BAN HAMMER', level: 'banhammer', message: this.username+" was kicked from the channel!", room: this.room});
+        $('.sidebar').text("NOT AVAILABLE")
+        $('.viewport').text(" ")
+        socket.disconnect();
         document.cookie = "_chatAuth=false";
-        document.body = "<strong>you were kicked from this server</strong>"
-    },
+        window.alert("You have been kicked from this server!");
+        window.location = "https://google.com"
+        },
     discon: (chanr) => {
         socket.emit('meta#all', {intend: 'leave', chan: chanr, user: chat.username});
         console.log("[proxy] IO pipe disconnect");return socket.disconnect();},
@@ -213,7 +221,26 @@ var chat = {
         }
 
     },
-    short4: function() {chat.openModal('private', 'SECURE CHANNEL', 'Please enter the private key', "d2Fuc1ByaXZhdGVLZXk=", 4)}
+    short4: function() {chat.openModal('private', 'SECURE CHANNEL', 'Please enter the private key', "d2Fuc1ByaXZhdGVLZXk=", 4)},
+    censorRE: function(message) {
+        let blist = ['fuck', 'fucking', 'fucc', 'shit', 'bitch', 'slut', 'whore', 'penis', 'cock', 'vagina', 'anal', 'anus', 'dick',
+                     'fucker', 'nigga', 'nigger', 'boobs', 'tits', 'cunt', 'motherfucker', 'faggot', 'dipshit', 'fucked'],i=0,x=0;
+        message = message.split(' ');
+        for(i=0; i<message.length; i++) {
+            if(blist.includes(message[i])) {
+                let fstr = message[i].charAt(0);
+                for(x=1; x<message[i].length; x++) {
+                    fstr = fstr + "*"
+                }
+                message[i] = fstr;
+            }
+        }
+        return message.join(" ");
+    },
+    terms: ()=>{chat.openModal('normal', 'CHATROOM RULES', 'No swearing, no spamming, no harassment, no defamation, no solicitation, no psuedonames.' +
+    'The owner of this chat service will not be held responsible or liable for any illegal act commited in the chat service. At any point may the owner of '+
+    'the chat service close any and all ports and websockets allowing the chat for any reason unspecified.'+
+    'By using this chat service, you are hereby agreeing to all of these terms. Failure to abide by these can and will result in a ban from the chatroom channels.')},
 }
 !(function() {
 }())
