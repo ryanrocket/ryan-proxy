@@ -227,7 +227,7 @@ var chat = {
                      'fucker', 'nigga', 'nigger', 'boobs', 'tits', 'cunt', 'motherfucker', 'faggot', 'dipshit', 'fucked'],i=0,x=0;
         message = message.split(' ');
         for(i=0; i<message.length; i++) {
-            if(blist.includes(message[i])) {
+            if(blist.includes(message[i].toLowerCase())) {
                 let fstr = message[i].charAt(0);
                 for(x=1; x<message[i].length; x++) {
                     fstr = fstr + "*"
