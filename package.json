@@ -28,7 +28,7 @@
     "nodemon": "^2.0.4",
     "request": "^2.88.2",
     "set-query-string": "^2.2.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "socket.io-client": "^2.3.0"
   }
 }
